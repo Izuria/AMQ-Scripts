@@ -20,6 +20,7 @@ if (document.getElementById("startPage")) return;
 let loadInterval = setInterval(() => {
     if (document.getElementById("loadingScreen").classList.contains("hidden")) {
         setup();
+        loadTable();
         clearInterval(loadInterval);
     }
 }, 500);
@@ -27,6 +28,7 @@ let loadInterval = setInterval(() => {
 let listWindow;
 let listWindowOpenButton;
 let listWindowTable;
+let listWindowOpenMenu;
 
 let infoWindow;
 
@@ -107,6 +109,7 @@ function createListWindow() {
         .append($(`<button class="btn btn-default songListOptionsButton" type="button"><i aria-hidden="true" class="fa fa-trash-o"></i></button>`)
             .dblclick(() => {
                 createNewTable();
+                saveTable();
             })
             .popover({
                 placement: "bottom",
@@ -184,6 +187,14 @@ function createListWindow() {
     listWindow.panels[1].panel.append(listWindowTable);
 
     // button to access the song results
+
+
+    listWindowOpenMenu = $(`<li class="clickAble">Song List</li>`)
+        .click(function () {
+            listWindow.open();
+        });
+
+
     listWindowOpenButton = $(`<div id="qpSongListButton" class="clickAble qpOption"><i aria-hidden="true" class="fa fa-list-ol qpMenuItem"></i></div>`)
         .click(function () {
             if(listWindow.isVisible()) {
@@ -206,6 +217,8 @@ function createListWindow() {
     let oldWidth = $("#qpOptionContainer").width();
     $("#qpOptionContainer").width(oldWidth + 35);
     $("#qpOptionContainer > div").append(listWindowOpenButton);
+    
+    $("#optionsContainer ul").append(listWindowOpenMenu);
 
     listWindow.body.attr("id", "listWindowBody");
     addTableHeader();
@@ -1169,6 +1182,32 @@ function createSettingsWindow() {
         )
 }
 
+
+// My small functions here
+function saveTable() {
+    localStorage.setItem("AnimeMusicTable", JSON.stringify(exportData));
+}
+
+
+function loadTable() {
+    let loadedTable = localStorage.getItem("AnimeMusicTable");
+    if(loadedTable != null) {
+        const array = JSON.parse(loadedTable);
+
+        for(var i = 0; i < array.length; i++){
+            addTableEntry(array[i]);
+            exportData.push(array[i]);
+        }
+    }
+}
+
+function shortcutKey(k)
+{
+    if(k.ctrlKey && k.shiftKey && k.key === 'a')
+        listWindow.open();
+}
+
+
 // save settings to local storage
 function saveSettings() {
     localStorage.setItem("songListSettings", JSON.stringify(savedSettings));
@@ -1226,6 +1265,7 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
+        saveTable();
     });
 
     // get song data on answer reveal
@@ -1301,6 +1341,7 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
+        saveTable();
     });
 
     // triggers when loading rooms in the lobby, this is to detect when a player leaves the lobby to reset the song list table
@@ -1308,6 +1349,7 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
+        saveTable();
     });
 
     quizReadyListener.bindListener();
@@ -1347,7 +1389,9 @@ function setup() {
     // Auto scrolls the list on new entry added
     document.getElementById("listWindowTable").addEventListener("DOMNodeInserted", function() {
         autoScrollList();
-    });
+    }); 
+
+
 
     // Add metadata
     AMQ_addScriptData({
