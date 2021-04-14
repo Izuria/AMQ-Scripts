@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         AMQ Song List UI
 // @namespace    https://github.com/TheJoseph98
-// @version      3.2.3
+// @version      3.2.4
 // @description  Adds a song list window, accessible with a button below song info while in quiz, each song in the list is clickable for extra information
 // @author       TheJoseph98
 // @match        https://animemusicquiz.com/*
@@ -1265,7 +1265,6 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
-        saveTable();
     });
 
     // get song data on answer reveal
@@ -1334,6 +1333,7 @@ function setup() {
         }
         addTableEntry(newSong);
         exportData.push(newSong);
+        saveTable();
     });
 
     // reset songs on returning to lobby
@@ -1341,7 +1341,6 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
-        saveTable();
     });
 
     // triggers when loading rooms in the lobby, this is to detect when a player leaves the lobby to reset the song list table
@@ -1349,7 +1348,6 @@ function setup() {
         if ($("#slAutoClear").prop("checked")) {
             createNewTable();
         }
-        saveTable();
     });
 
     quizReadyListener.bindListener();
