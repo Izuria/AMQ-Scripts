@@ -3,8 +3,6 @@
 ### Improved Song List UI
 [Song List UI](https://github.com/Izuria/AMQ-Scripts/raw/master/amqSongListUI.user.js)
 
-UPDATE 2021-02-13: I will no longer create or update AMQ scripts. If there are any bugs or new features you want added, fix/do it yourselves. I will merge open pull requests.
-
 ### Installation
 
 Requires Tampermonkey browser extension (Greasemonkey doesn't work).
